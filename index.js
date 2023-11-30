@@ -208,8 +208,9 @@ app.get("/get_orders", async (req, res) => {
  */
 
 app.post("/clear_orders", async (req, res) => {
+  console.log("Request Body:", req.body);
   try {
-    await client.query("DELETE * FROM orders");
+    await client.query("DELETE FROM orders");
     res.json({ message: "All orders cleared successfully" });
   } catch (error) {
     console.error("Error clearing orders:", error);
