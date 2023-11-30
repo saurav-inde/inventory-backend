@@ -17,13 +17,13 @@ app.use(express.urlencoded({ extended: true }));
  * Endpoints for signup and sign in
  */
 
-// Sign-up endpoint
+
 app.post("/signup", async (req, res) => {
-  console.log("Request Body:", req.body); // Log the entire request body
+  console.log("Request Body:", req.body); 
   const { email, password, isVendor } = req.body;
   console.log(email, password, isVendor);
 
-  // Hash the password before storing it
+ 
   const hashedPassword = await bcrypt.hash(password, 10);
 
   console.log(hashedPassword, isVendor);
@@ -39,34 +39,6 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-// app.post("/signin", async (req, res) => {
-//   const { email, password, isVendor } = req.body;
-
-//   try {
-//     // Finding user by email in PostgreSQL
-//     const result = await client.query("SELECT * FROM users WHERE email = $1 && is_vendor = ${isVendor}", [
-//       email,
-//     ]);
-//     const user = result.rows[0];
-
-//     // If user not found or password doesn't match
-//     if (!user || !(await bcrypt.compare(password, user.password))) {
-//       return res.status(401).json({ message: "Invalid credentials" });
-//     }
-
-//     // Create and sign a JWT token
-//     const token = jwt.sign(
-//       { userId: user.id, isVendor: user.is_vendor },
-//       "your-secret-key",
-//       { expiresIn: "1h" }
-//     );
-//     // Return the token
-//     res.json({ token });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// });
 app.post("/signin", async (req, res) => {
   const { email, password, isVendor } = req.body;
   console.log(email, password, isVendor);
@@ -123,10 +95,8 @@ app.post("/add_products", async (req, res) => {
     await addProduct(client, productData);
     console.log(client.query("SELECT * FROM products"));
 
-    // Respond with a success message
     res.status(201).json({ message: "Product added successfully" });
   } catch (error) {
-    // Respond with an error message
     res.status(500).json({ message: "Internal server error" });
   }
   // await client.end();
@@ -139,8 +109,6 @@ app.post("/add_products", async (req, res) => {
 // Endpoint to fetch all products
 app.get("/get_products", async (req, res) => {
   try {
-    // Connect to the database
-    // await client.connect();
 
     // Retrieve all products from the products table
     const result = await client.query("SELECT * FROM products");
@@ -152,8 +120,6 @@ app.get("/get_products", async (req, res) => {
     // Respond with an error message
     res.status(500).json({ message: "Internal server error" });
   } finally {
-    // Close the database connection
-    // await client.end();
   }
 });
 
@@ -208,11 +174,8 @@ app.get("/api/cart/:userId", async (req, res) => {
 // Add the /store_order route
 app.post("/store_order", async (req, res) => {
   try {
-    // const {  } = req.body;
 
     await addOrderToTable(req, res);
-
-    // console.log(req.body);
 
     res.json({ message: "Order details stored successfully" });
   } catch (error) {
