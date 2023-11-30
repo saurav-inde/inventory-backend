@@ -204,6 +204,20 @@ app.get("/get_orders", async (req, res) => {
 });
 
 /**
+ * Remove all the orders
+ */
+
+app.post("/clear_orders", async (req, res) => {
+  try {
+    await pool.query("DELETE FROM orders");
+    res.json({ message: "All orders cleared successfully" });
+  } catch (error) {
+    console.error("Error clearing orders:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+/**
  *  Starting the server
  *
  */
